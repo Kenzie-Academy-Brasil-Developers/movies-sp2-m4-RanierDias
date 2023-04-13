@@ -8,44 +8,8 @@ Abaixo estão todas as regras de negócio definidas pelo cliente, tanto para a e
 
 Vamos lá?!
 
-#
+## Tabela Movie
 
-    O repositório da entrega conta com um arquivo chamado *movies_workspace*. Esse arquivo é um documento de design utilizado no *insomnia*.
-    Ele contém todas as rotas necessárias para que a aplicação esteja de acordo com as regras impostas.
-    Esse arquivo também será utilizado por instrutores e monitores na correção das entregas.
-
-    O workspace em questão possui duas páginas:
-      * Pagina para Debug:
-        - pode ser utilizado a vontade e ter seus valores para criação, listagem, atualização ou deleção, alterados sem problemas.
-
-      * Pagina para Testes:
-        - ***NUNCA ALTERE NENHUM TESTE OU ROTA DA PÁGINA DE TESTES***;
-        - para executar os testes é importante ressaltar:
-          - você precisa utilizar a enviroment **test**;
-          - você deve realizar ao menos uma requisição em cada uma das rotas de debug da pagina *Rotas para Testes*, antes de executar os testes.
-          - ATENÇÃO: sempre REINICIE o servidor e DROP SUA TABELA E RECRIE NOVAMENTE, antes de cada novo teste ou bateria de testes, que for executar;
-
-#
-
-## Regras da entrega
-
-A entrega deve seguir as seguintes regras:
-
--   O código deve estar em TypeScript, caso não esteja a **entrega será zerada**;
--   Deverá ser utilizado um banco de dados **_postgres_** para a elaboração da API;
--   O nome da tabela, das colunas e demais especificações, devem ser seguidas a risca. Caso tenha divergência, **será descontado nota**;
--   Deve conter uma pasta **sql** na **raiz do projeto** com dois arquivos:
-    -   **create_table.sql**: contendo a criação da tabela **movie**;
-        -   deve conter **APENAS** a criação da **TABELA**.
-    -   **diagram.png/jgp**: um arquivo **_.png_** ou **_.jpg_** contendo o diagrama da tabela;
-    -   caso o arquivo **_create_table.sql_** não exista, **a entrega será zerada**.
--   A organização de arquivos deve seguir o que foi visto previamente.
-
-#
-
-## Tabela
-
-O nome da tabela **deve** ser **movies**.
 
 | Coluna       | Especificações                               |
 | ------------ | -------------------------------------------- |
@@ -73,13 +37,32 @@ O nome da tabela **deve** ser **movies**.
 
 ### GET /movies
 
--   A rota **GET /movies**, além de listar todos os filmes do cinema, também deve conseguir listar os filmes a partir da categoria específica.
-    -   Essa categoria deve ser enviada pelo query parameter **category**.
-    -   Caso a categoria enviada não exista, deve-se retornar todos os filmes do banco.
+| **Resposta do servidor:**           |
+| ----------------------------------- |
+| **Status code:** **_200 OK._** |
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Divertidamente",
+        "category": "Animação",
+        "duration": 120,
+        "price": 35
+    },
+    {
+        "id": 2,
+        "name": "Meu vizinho Tororo",
+        "category": "Animação",
+        "duration": 120,
+        "price": 20
+}
+]
+```
 
 ## Casos de erro
 
--   Nas rotas **GET, PATCH e DELETE /movies/:id**, caso **id** não exista, deve-se retornar a mensagem de erro e status code mencionados abaixo:
+-   Nas rotas **GET, PATCH e DELETE /movies/:id**, caso **id** não exista a mensagem de erro e status code será:
 
     -   Status code: **_404 NOT FOUND._**
     -   Mensagem de retorno:
@@ -90,7 +73,7 @@ O nome da tabela **deve** ser **movies**.
         }
         ```
 
--   Nas rotas **POST e PATCH**, caso **name** já exista, deve retornar a mensagem de erro abaixo. O status code deve ser o mencionado abaixo:
+-   Nas rotas **POST e PATCH**, caso **name** já exista o status code será:
 
     -   Status code: **_409 CONFLICT._**
     -   Mensagem de retorno:
@@ -107,7 +90,7 @@ O nome da tabela **deve** ser **movies**.
 
 ### POST /movies
 
-Rota de criação de filme. Deve ser possível criar um filme.
+Rota de criação de filme.
 | **Corpo da requisição:** |
 |-|
 
@@ -136,7 +119,7 @@ Rota de criação de filme. Deve ser possível criar um filme.
 
 ### GET /movies
 
-Rota de listagem de filmes. Deve ser possível retornar todos os filmes do cinema.
+Rota de listagem de filmes.
 | Resposta do servidor: |
 | - |
 |**Status code:** **_200 OK._**|
@@ -162,7 +145,7 @@ Rota de listagem de filmes. Deve ser possível retornar todos os filmes do cinem
 
 #### Com query parameter
 
-O exemplo abaixo foi realizado na seguinte rota: **/movies?category=Animação**.
+Rota: **/movies?category=Animação**.
 | Resposta do servidor: |
 | - |
 | **Status code:** **_200 OK._** |
@@ -181,7 +164,7 @@ O exemplo abaixo foi realizado na seguinte rota: **/movies?category=Animação**
 
 #### Com query parameter
 
-O exemplo abaixo foi realizado na seguinte rota: **/movies?category=outra categoria**.
+Rota: **/movies?category=outra categoria**.
 | Resposta do servidor: |
 | - |
 | **Status code:** **_200 OK._** |
@@ -207,8 +190,8 @@ O exemplo abaixo foi realizado na seguinte rota: **/movies?category=outra catego
 
 ### GET /movies/:id
 
-Rota de busca de filme. Deve ser possível buscar um filme pelo id.
-O exemplo abaixo foi realizado na seguinte rota: **/movies/1**.
+Rota de ler um filme específico.
+
 | Resposta do servidor: |
 | - |
 | **Status code:** **_200 OK._** |
@@ -225,9 +208,8 @@ O exemplo abaixo foi realizado na seguinte rota: **/movies/1**.
 
 ### PATCH /movies/:id
 
-Rota de atualização de filme. Deve ser possível atualizar um filme pelo id. Todos os campos podem ser atualizados de forma opcional.
+Rota de atualização de filme.
 
-O exemplo abaixo foi realizado na seguinte rota: **/movies/2**.
 | **Corpo da requisição:** |
 |-|
 
@@ -253,12 +235,10 @@ O exemplo abaixo foi realizado na seguinte rota: **/movies/2**.
 
 ### DELETE /movies/:id
 
-Rota de deleção de filme. Deve ser possível deletar um filme pelo id.
-O exemplo abaixo foi realizado na seguinte rota: **/movies/1**.
+Rota de deleção de filme.
+
 | Resposta do servidor: |
 |-|
 |**Status code:** **_204 NO CONTENT._**|
-
-**Não** altere nenhum dado do readme.
 
 repository uid: 6c05b259-e7c0-4798-917f-270afbc010d9
